@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     get  '/users/:username/tweets' => 'tweets#index_by_user'
     get  '/tweets/search/:keyword' => 'tweets#search'
   end
-
+  
+  get 'dashboard' => 'static_pages#dashboard'
   get '*path' => 'static_pages#home'
 end

@@ -1,0 +1,20 @@
+$bg-color: #e6ecf0;
+$primary-color: #1ea1f2;
+
+body {
+  background: $bg-color;
+}
+
+.user {
+  background: $primary-color;
+}
+
+.search-btn {
+  border: 1px solid $primary-color;
+  color: $primary-color;
+}
+
+.search-btn:hover {
+  background: $primary-color;
+  color: #fff;
+}
