@@ -40,7 +40,6 @@ class Dashboard extends React.Component {
       tweets: []
     };
 
-    this.handleBrandClick = this.handleBrandClick.bind(this);
     this.handleDeleteTweet = this.handleDeleteTweet.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.handleInputKeyUp = this.handleInputKeyUp.bind(this);
@@ -123,14 +122,6 @@ class Dashboard extends React.Component {
       .catch(error => console.log(error));
   };
 
-  handleBrandClick() {
-    getTweets()
-      .then(response => {
-        this.setState({ tweetCount: response.tweets.length, tweets: response.tweets })
-      })
-      .catch(error => console.log(error));
-  };
-
   handleDeleteTweet(e) {
     e.preventDefault();
     let id = e.target.id;
@@ -163,15 +154,15 @@ class Dashboard extends React.Component {
               <a className="nav-link" href="#">Messages</a>
             </li>
           </ul>  
-        <a className="navbar-brand" href="#"><FontAwesomeIcon icon={faTwitter} color="#1ea1f2" /></a>
-        <form className="form-inline my-2 my-lg-0">
-          <input className="form-control mr-sm-2" type="search" placeholder="Search Twitter" aria-label="Search" />
-          <button className="search-btn my-2 my-sm-0" type="submit">Search</button>
-        </form>
-        <div>
-          <a className="nav-link" href="#" id="username"></a>
-          <a className="nav-link" href="#" onClick={this.handleLogout}>Log Out</a>
-        </div>
+          <a className="navbar-brand" href="#"><FontAwesomeIcon icon={faTwitter} color="#1ea1f2" /></a>
+          <form className="form-inline my-2 my-lg-0">
+            <input className="form-control mr-sm-2" type="search" placeholder="Search Twitter" aria-label="Search" />
+            <button className="search-btn my-2 my-sm-0" type="submit">Search</button>
+          </form>
+          <div>
+            <a className="nav-link" href="#" id="username"></a>
+            <a className="nav-link" href="#" onClick={this.handleLogout}>Log Out</a>
+          </div>
         </nav>
         <div className="row">
           <div className="col-xs-12 col-md-4">
@@ -202,30 +193,27 @@ class Dashboard extends React.Component {
               <p>#JavaScript</p>
               <p>#Fullstack</p>
             </div>
-        <div>
-          </div>
-        </div> 
-        <div className="col-xs-12 col-md-8">
-          <div className="mt-3">
-            <div>
-              <textarea 
-                className="w-100"
-                onKeyUp={this.handleInputKeyUp}
-                ref="postInput"
-              >
-              </textarea>
+          </div> 
+          <div className="col-xs-12 col-md-8">
+            <div className="mt-3">
               <div>
-                <button className="btn btn-primary text-white" onClick={this.handlePostTweet}>Tweet</button> 
-                <p className="ml-5 d-inline"><span>{remainChar}</span> characters</p>
-              </div>
-              </div>
-                <div id="tweets" className="mt-5">
-                  {(() => {
-                    return tweets.map(tweet => {
-                      return <Tweet key={tweet.id} tweet={tweet} handleDeleteTweet={this.handleDeleteTweet} />;
-                    })
-                  })()}
+                <textarea 
+                  className="w-100"
+                  onKeyUp={this.handleInputKeyUp}
+                  ref="postInput"
+                />
+                <div>
+                  <button className="btn btn-primary text-white" onClick={this.handlePostTweet}>Tweet</button> 
+                  <p className="ml-5 d-inline"><span>{remainChar}</span> characters</p>
                 </div>
+              </div>
+              <div id="tweets" className="mt-5">
+                {(() => {
+                  return tweets.map(tweet => {
+                    return <Tweet key={tweet.id} tweet={tweet} handleDeleteTweet={this.handleDeleteTweet} />;
+                  })
+                })()}
+              </div>
             </div>
           </div>
         </div>
