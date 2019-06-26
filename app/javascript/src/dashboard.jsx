@@ -65,9 +65,7 @@ class Dashboard extends React.Component {
   }
 
   handleChange(e) {
-    let post = e.target.value;
-
-    this.setState({ post: post });
+    this.setState({ post: e.target.value });
   };
 
   handlePostTweet(e) {
