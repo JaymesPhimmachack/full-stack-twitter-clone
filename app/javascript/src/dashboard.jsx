@@ -27,23 +27,21 @@ const Tweet = (props) => {
   );
 }
 
-
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       username: 'undefined',
       tweetCount: 0,
-      charLength: 140,
-      remainChar: 140,
-      postLength: 1,
+      charLimit: 140,
+      post: '',
       tweets: []
     };
 
     this.handleBrandClick = this.handleBrandClick.bind(this);
     this.handleDeleteTweet = this.handleDeleteTweet.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
-    this.handleInputKeyUp = this.handleInputKeyUp.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.handlePostTweet = this.handlePostTweet.bind(this);
   }
 
@@ -66,23 +64,10 @@ class Dashboard extends React.Component {
       .catch(error => console.log(error));
   }
 
-
-  handleInputKeyUp(e) {
+  handleChange(e) {
     let post = e.target.value;
-    let postLength = post.length;
-    let charLength = this.state.charLength;
-    let charCount = charLength - postLength;
 
-    this.setState({ remainChar: charCount })
-    this.setState({ post: post })
-    let remainChar = this.state.remainChar;
-
-    if (remainChar > 0 && remainChar <= 140) {
-      e.target.nextSibling.childNodes[0].removeAttribute('disabled');
-    }
-    else {
-      e.target.nextSibling.childNodes[0].setAttribute('disabled', 'disabled');
-    }
+    this.setState({ post: post });
   };
 
   handlePostTweet(e) {
@@ -93,13 +78,10 @@ class Dashboard extends React.Component {
       .then(response => {
         if (response.success) {
 
-          let postInput = this.refs.postInput;
-          postInput.value = '';
-          this.setState({ remainChar: 140 })
+          this.setState({ post: '' })
 
           getTweets()
             .then(response => {
-              console.log(response)
               this.setState({ tweetCount: response.tweets.length, tweets: response.tweets })
             })
             .catch(error => console.log(error));
@@ -134,7 +116,7 @@ class Dashboard extends React.Component {
   handleDeleteTweet(e) {
     e.preventDefault();
     let id = e.target.id;
-    console.log(id)
+
     deleteTweet(id)
       .then(() => {
         getTweets()
@@ -147,7 +129,13 @@ class Dashboard extends React.Component {
   };
 
   render() {
-    const { tweets, username, tweetCount, remainChar } = this.state;
+    const { tweets, username, tweetCount, charLimit, post } = this.state;
+    let disabled = false,
+      remainingChar = charLimit - post.length;
+
+    if (remainingChar < 0) {
+      disabled = true;
+    }
 
     return (
       <div ref="dashboard" className="container">
@@ -210,13 +198,13 @@ class Dashboard extends React.Component {
             <div>
               <textarea 
                 className="w-100"
-                onKeyUp={this.handleInputKeyUp}
-                ref="postInput"
+                onChange={this.handleChange}
+                value={post}
               >
               </textarea>
               <div>
-                <button className="btn btn-primary text-white" onClick={this.handlePostTweet}>Tweet</button> 
-                <p className="ml-5 d-inline"><span>{remainChar}</span> characters</p>
+                <button className="btn btn-primary text-white" disabled={disabled} onClick={this.handlePostTweet}>Tweet</button> 
+                <p className="ml-5 d-inline"><span>{remainingChar}</span> characters</p>
               </div>
               </div>
                 <div id="tweets" className="mt-5">
